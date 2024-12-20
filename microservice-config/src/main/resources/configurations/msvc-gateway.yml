@@ -1,0 +1,28 @@
+server:
+  port: 9090
+#  port: ${PORT:${SERVER_PORT:0}} ESTO ES PARA QUE UTILICE UN PUERTO ALEATORIO DISPONIBLE
+
+eureka:
+  client:
+    register-with-eureka: false
+
+spring:
+  application:
+    name: msvc-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: students
+          uri: http://localhost:8091
+#          uri: students
+#          uri: lb://students
+#          PRBAR SI FUNCIONA CON ALGUNO DE ESTOS DOS
+          predicates:
+            - Path=/api/students/**
+        - id: courses
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/courses/**
